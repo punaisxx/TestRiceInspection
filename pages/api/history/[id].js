@@ -17,6 +17,59 @@ export default async function handler(req, res) {
       console.error('Error fetching inspection:', error);
       res.status(500).json({ error: 'Failed to fetch inspection data' });
     }
+  } else if (req.method === 'DELETE') {
+    try {
+      const result = await query('DELETE FROM history WHERE id = $1 RETURNING *', [id]);
+
+      if (result.rowCount === 0) {
+        return res.status(404).json({ error: 'Record not found' });
+      }
+
+      res.status(200).json({ message: 'Record deleted successfully', data: result.rows[0] });
+    } catch (error) {
+      console.error('Error deleting record:', error);
+      res.status(500).json({ error: 'Failed to delete record' });
+    }
+  } else if (req.method === 'PATCH') {
+    // Retrieve the fields from the request body, defaulting to null if empty
+    const {
+      note,
+      price,
+      samplingDateTime,
+      samplingPoint
+    } = req.body;
+
+    // Prepare values with null handling for empty fields
+    const values = [
+      note,
+      price || null,
+      samplingDateTime || null, // Use null instead of empty string for timestamps
+      samplingPoint || null,
+      id
+    ];
+
+    try {
+      const result = await query(
+        `UPDATE history
+         SET note = $1,
+             price = $2,
+             sampling_datetime = $3,
+             sampling_point = $4,
+             updated_at = NOW()
+         WHERE id = $5
+         RETURNING *`,
+        values
+      );
+
+      if (result.rowCount === 0) {
+        return res.status(404).json({ error: 'Record not found' });
+      }
+
+      res.status(200).json({ message: 'Record updated successfully', data: result.rows[0] });
+    } catch (error) {
+      console.error('Error updating record:', error);
+      res.status(500).json({ error: 'Failed to update data' });
+    }
   } else {
     res.status(405).json({ error: 'Method not allowed' });
   }

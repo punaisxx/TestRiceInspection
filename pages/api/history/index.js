@@ -1,34 +1,3 @@
-// // /pages/api/history/index.js
-
-// import query from '../../../lib/db';
-
-// export default async function handler(req, res) {
-//   if (req.method === 'GET') {
-//     try {
-//       const result = await query(`
-//         SELECT
-//           created_at AS "createDateTime",
-//           inspection_id AS "inspectionID",
-//           name,
-//           standard,
-//           note,
-//           total_sample AS "totalSample",
-//           results
-//         FROM history
-//         ORDER BY created_at DESC
-//       `);
-//       res.status(200).json(result.rows);
-//     } catch (error) {
-//       console.error('Error fetching history data:', error);
-//       res.status(500).json({ message: 'Failed to fetch history data' });
-//     }
-//   } else {
-//     res.status(405).json({ message: 'Method Not Allowed' });
-//   }
-// }
-
-// pages/api/history.js
-
 import fs from 'fs';
 import path from 'path';
 import query from '/Users/rawinnipha/Test/next-app/lib/db.js';
@@ -61,7 +30,6 @@ function calculateInspection(standard, grains) {
       }
     }
 
-    // Grains that do not match any subStandard are categorized as "unknown"
     if (!matched) {
       if (!categories.unknown) {
         categories.unknown = { totalWeight: 0, count: 0 };
@@ -96,57 +64,89 @@ function readJSONFile(filePath) {
   }
 }
 
+// Main handler for API endpoints
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+  const { method, query: { id } } = req;
 
-  const { name, standard, note, price, samplingPoint, samplingDateTime, upload } = req.body;
+  if (method === 'POST') {
+    const { name, standard, note, price, samplingPoint, samplingDateTime, upload } = req.body;
 
-  try {
-    // Load and validate the standard from standards.json
-    const standardsFilePath = path.join(process.cwd(), 'public', 'standards.json');
-    const standards = readJSONFile(standardsFilePath);
-    const selectedStandard = standards.find(s => s.id === standard);
-    
-    if (!selectedStandard) {
-      return res.status(400).json({ error: 'Invalid standard ID' });
+    try {
+      const standardsFilePath = path.join(process.cwd(), 'public', 'standards.json');
+      const standards = readJSONFile(standardsFilePath);
+      const selectedStandard = standards.find(s => s.id === standard);
+
+      if (!selectedStandard) {
+        return res.status(400).json({ error: 'Invalid standard ID' });
+      }
+
+      const rawFilePath = path.join(process.cwd(), 'public', 'raw.json');
+      const rawData = readJSONFile(rawFilePath);
+
+      if (!Array.isArray(rawData.grains)) {
+        return res.status(400).json({ error: 'Invalid data format in raw.json. Expected grains to be an array.' });
+      }
+
+      const results = calculateInspection(selectedStandard, rawData.grains);
+
+      const queryText = `
+        INSERT INTO history 
+        (name, standard, note, price, sampling_point, sampling_datetime, upload, created_at, updated_at, total_sample, results)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW(), $8, $9)
+        RETURNING *;
+      `;
+      const queryValues = [
+        name,
+        standard,
+        note,
+        price || null,
+        samplingPoint?.length ? samplingPoint : null,
+        samplingDateTime || null,
+        upload || null,
+        results.totalSample,
+        JSON.stringify(results),
+      ];
+
+      const result = await query(queryText, queryValues);
+
+      res.status(200).json({ message: 'Form submitted successfully', data: result.rows[0] });
+    } catch (error) {
+      console.error('Error saving form data:', error);
+      res.status(500).json({ error: 'Failed to save data' });
     }
 
-    // Load and validate grains from raw.json
-    const rawFilePath = path.join(process.cwd(), 'public', 'raw.json');
-    const rawData = readJSONFile(rawFilePath);
-    
-    if (!Array.isArray(rawData.grains)) {
-      return res.status(400).json({ error: 'Invalid data format in raw.json. Expected grains to be an array.' });
+  } else if (method === 'GET') {
+    if (id) {
+      return res.status(400).json({ error: 'Method not allowed' });
     }
 
-    const results = calculateInspection(selectedStandard, rawData.grains);
+    try {
+      const result = await query('SELECT * FROM history ORDER BY created_at DESC;');
+      res.status(200).json({ data: result.rows });
+    } catch (error) {
+      console.error('Error retrieving history data:', error);
+      res.status(500).json({ error: 'Failed to retrieve data' });
+    }
 
-    // Insert data into the PostgreSQL database
-    const queryText = `
-      INSERT INTO history 
-      (name, standard, note, price, sampling_point, sampling_datetime, upload, created_at, updated_at, total_sample, results)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW(), $8, $9)
-      RETURNING *;
-    `;
-    const queryValues = [
-      name,
-      standard,
-      note,
-      price || null,
-      samplingPoint?.length ? samplingPoint : null,
-      samplingDateTime || null,
-      upload || null,
-      results.totalSample,
-      JSON.stringify(results),
-    ];
+  } else if (method === 'DELETE') {
+    if (!id) {
+      return res.status(400).json({ error: 'Missing record id in request' });
+    }
 
-    const result = await query(queryText, queryValues);
+    try {
+      const result = await query('DELETE FROM history WHERE id = $1 RETURNING *;', [id]);
 
-    res.status(200).json({ message: 'Form submitted successfully', data: result.rows[0] });
-  } catch (error) {
-    console.error('Error saving form data:', error);
-    res.status(500).json({ error: 'Failed to save data' });
+      if (result.rowCount === 0) {
+        return res.status(404).json({ error: 'Record not found' });
+      }
+
+      res.status(200).json({ message: 'Record deleted successfully', data: result.rows[0] });
+    } catch (error) {
+      console.error('Error deleting record:', error);
+      res.status(500).json({ error: 'Failed to delete data' });
+    }
+
+  } else {
+    res.status(405).json({ error: 'Method not allowed' });
   }
 }

@@ -1,207 +1,148 @@
-// pages/history/index.js
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import axios from 'axios';
 
-export default function History() {
-  const [historyData, setHistoryData] = useState([]);
-  const [searchId, setSearchId] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [selectedIds, setSelectedIds] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const router = useRouter();
+export default function HistoryPage() {
+  const [histories, setHistories] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [inspectionData, setInspectionData] = useState(null);
+  const [formData, setFormData] = useState({
+    name: '',
+    standard: '',
+    note: '',
+    price: '',
+    samplingPoint: '',
+    samplingDateTime: '',
+    upload: null,
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
+  // Fetch all history records initially
   useEffect(() => {
-    fetchHistoryData();
-  }, [currentPage]);
+    const fetchHistory = async () => {
+      try {
+        const response = await axios.get('/api/history');
+        setHistories(response.data.data);
+      } catch (error) {
+        console.error('Error fetching history:', error);
+      }
+    };
+    fetchHistory();
+  }, []);
 
-  const fetchHistoryData = async () => {
+  const handleSearch = async () => {
+    if (!searchQuery) return;
+
     setLoading(true);
+    setError('');
+
     try {
-      const response = await fetch(`/api/history?page=${currentPage}&id=${searchId}`);
-      const data = await response.json();
-      setHistoryData(data.records || []);
-      setTotalPages(data.totalPages || 1);
+      const response = await axios.get(`/api/history/${searchQuery}`);
+      setInspectionData(response.data); // set specific search result
+      setError(''); // Clear previous error messages
     } catch (error) {
-      console.error('Error fetching history data:', error);
-      setHistoryData([]);
+      console.error('Error fetching inspection data:', error);
+      setError('No inspection found with that ID.');
+      setInspectionData(null); // Clear any previous search data
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSearch = async () => {
-    setCurrentPage(1); // Reset to the first page when searching
-    fetchHistoryData();
-  };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    setError('');
 
-  const handleDelete = async () => {
-    if (!selectedIds.length) return;
+    const formPayload = new FormData();
+    Object.keys(formData).forEach((key) => formPayload.append(key, formData[key]));
 
-    const confirmed = confirm("Are you sure you want to delete the selected records?");
-    if (confirmed) {
-      try {
-        await fetch('/api/history', {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ ids: selectedIds }),
-        });
-        setSelectedIds([]); // Clear selection after deletion
-        fetchHistoryData(); // Refresh the history
-      } catch (error) {
-        console.error('Error deleting history:', error);
-      }
+    try {
+      const response = await axios.post('/api/history', formPayload, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      setHistories([response.data.data, ...histories]);
+      setFormData({
+        name: '',
+        standard: '',
+        note: '',
+        price: '',
+        samplingPoint: '',
+        samplingDateTime: '',
+        upload: null,
+      });
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setError('Failed to submit data.');
     }
+    setLoading(false);
   };
 
-  const toggleSelectId = (id) => {
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    );
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      upload: file,
+    }));
   };
 
-  const handleClearSearch = () => {
-    setSearchId('');
-    setCurrentPage(1);
-    fetchHistoryData();
-  };
-
-  const handleRowClick = (id) => {
-    router.push(`/history/${id}`);
+  const handleDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this record?')) return;
+    try {
+      await axios.delete(`/api/history/${id}`);
+      setHistories(histories.filter((history) => history.id !== id));
+    } catch (error) {
+      console.error('Error deleting record:', error);
+      alert('Failed to delete record.');
+    }
   };
 
   return (
     <div>
-      <h1>Inspection History</h1>
+      <h1>History Records</h1>
 
-      {/* Search Input */}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+
       <input
         type="text"
-        value={searchId}
-        onChange={(e) => setSearchId(e.target.value)}
-        placeholder="Search by Inspection ID"
+        placeholder="Enter Inspection ID"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
       />
       <button onClick={handleSearch}>Search</button>
-      <button onClick={handleClearSearch}>Clear</button>
 
-      {/* Delete Button */}
-      <button onClick={handleDelete} disabled={!selectedIds.length}>Delete Selected</button>
+      <hr />
 
-      {/* History Table */}
-      {loading ? (
-        <p>Loading...</p>
+      {/* Display search result if available, otherwise list all records */}
+      {inspectionData ? (
+        <div>
+          <h2>Inspection Details</h2>
+          <p><strong>Name:</strong> {inspectionData.name}</p>
+          <p><strong>Standard:</strong> {inspectionData.standard}</p>
+          <p><strong>Note:</strong> {inspectionData.note}</p>
+          <p><strong>Price:</strong> {inspectionData.price}</p>
+          <p><strong>Sampling Point:</strong> {inspectionData.sampling_point}</p>
+          <p><strong>Date & Time:</strong> {inspectionData.sampling_datetime}</p>
+        </div>
       ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>Select</th>
-              <th>Create Date - Time</th>
-              <th>Inspection ID</th>
-              <th>Name</th>
-              <th>Standard</th>
-              <th>Note</th>
-            </tr>
-          </thead>
-          <tbody>
-            {historyData.map((record) => (
-              <tr key={record.id} onClick={() => handleRowClick(record.id)}>
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={selectedIds.includes(record.id)}
-                    onChange={() => toggleSelectId(record.id)}
-                  />
-                </td>
-                <td>{new Date(record.createdAt).toLocaleString()}</td>
-                <td>{record.id}</td>
-                <td>{record.name}</td>
-                <td>{record.standard}</td>
-                <td>{record.note}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <ul>
+          {histories.map((history) => (
+            <li key={history.id}>
+              <h3>
+                <Link href={`/history/${history.id}`}>{history.name}</Link>
+              </h3>
+              <p><strong>Standard:</strong> {history.standard}</p>
+              <p><strong>Note:</strong> {history.note}</p>
+              <p><strong>Price:</strong> {history.price}</p>
+              <p><strong>Sampling Point:</strong> {history.sampling_point}</p>
+              <p><strong>Date & Time:</strong> {history.sampling_datetime}</p>
+              <p><strong>Total Samples:</strong> {history.total_sample}</p>
+              <button onClick={() => handleDelete(history.id)}>Delete</button>
+            </li>
+          ))}
+        </ul>
       )}
-
-      {/* Pagination */}
-      {/* <div>
-        <button onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} disabled={currentPage === 1}>
-          Previous
-        </button>
-        <span> Page {currentPage} of {totalPages} </span>
-        <button onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages}>
-          Next
-        </button>
-      </div> */}
     </div>
   );
 }
-
-// /pages/history.js
-
-// // /pages/history.js
-
-// import { useState, useEffect } from 'react';
-
-// export default function History() {
-//   const [historyData, setHistoryData] = useState([]);
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     const fetchHistory = async () => {
-//       try {
-//         const response = await fetch('/api/history');
-//         const data = await response.json();
-//         setHistoryData(data);
-//       } catch (error) {
-//         console.error('Error fetching history data:', error);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchHistory();
-//   }, []);
-
-//   if (loading) {
-//     return <p>Loading...</p>;
-//   }
-
-//   return (
-//     <div style={{ padding: '20px' }}>
-//       <h2>Inspection History</h2>
-//       <table border="1" cellPadding="10" style={{ width: '100%', marginTop: '20px' }}>
-//         <thead>
-//           <tr>
-//             <th>Create Date - Time</th>
-//             <th>Inspection ID</th>
-//             <th>Name</th>
-//             <th>Standard</th>
-//             <th>Note</th>
-//             <th>Total Sample</th>
-//             <th>Results</th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {historyData.map((item, index) => (
-//             <tr key={index}>
-//               <td>{new Date(item.createDateTime).toLocaleString()}</td>
-//               <td>{item.inspectionID}</td>
-//               <td>{item.name}</td>
-//               <td>{item.standard}</td>
-//               <td>{item.note}</td>
-//               <td>{item.totalSample}</td>
-//               <td>
-//                 <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
-//                   {JSON.stringify(item.results, null, 2)}
-//                 </pre>
-//               </td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </table>
-//     </div>
-//   );
-// }

@@ -31,7 +31,7 @@ export default function InspectionDetail() {
   if (!inspectionData) return <p>Error: Unable to load inspection details.</p>;
 
   // Assuming inspectionData has a results field with the required structure
-  const results = inspectionData.results;
+  const results = inspectionData.results || {};
 
   return (
     <div>
@@ -138,7 +138,8 @@ export default function InspectionDetail() {
           </tr>
         </tbody>
       </table>
-
+      
+      <button onClick={() => router.push(`/history/${id}/edit`)}>Edit</button>
       <button onClick={() => router.push('/')}>Back to Form</button>
     </div>
   );
