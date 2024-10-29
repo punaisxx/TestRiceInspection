@@ -17,20 +17,26 @@ export default function Home() {
   const [message, setMessage] = useState('');
   const [standards, setStandards] = useState([]);
 
-  // Fetch standards from standards.json
-  useEffect(() => {
-        const fetchStandards = async () => {
-          try {
-            const response = await fetch('/standards.json');
-            const data = await response.json();
-            setStandards(data);
-          } catch (error) {
-            console.error('Error fetching standards:', error);
-          }
-        };
-    
-        fetchStandards();
+useEffect(() => {
+    const fetchStandards = async () => {
+      try {
+        const response = await fetch('/standards.json');
+        
+        // Check if fetch response was okay
+        if (!response.ok) {
+          throw new Error(`Failed to fetch standards: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        setStandards(data);
+      } catch (error) {
+        console.error('Error fetching standards:', error);
+      }
+    };
+
+    fetchStandards();
 }, []);
+
 
 
   // Handle form changes
