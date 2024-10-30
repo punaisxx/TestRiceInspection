@@ -1,0 +1,77 @@
+/* EditInspection.module.css */
+.container {
+        max-width: 600px;
+        margin: 30px auto;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+      
+      .h1 {
+        font-size: 26px;
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      
+      .form div {
+        margin-bottom: 16px;
+      }
+      
+      .label {
+        display: block;
+        font-weight: bold;
+        color: #555;
+        margin-bottom: 6px;
+      }
+      
+      .formInput {
+        width: 100%;
+        padding: 8px;
+        font-size: 16px;
+        color: #333;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        transition: border-color 0.3s ease;
+      }
+      
+      .formInput:focus {
+        border-color: #007bff;
+        outline: none;
+      }
+      
+      .submitButton {
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-right: 10px;
+      }
+      
+      .submitButton:hover {
+        background-color: #218838;
+      }
+      
+      .cancelButton {
+        background-color: #dc3545;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      
+      .cancelButton:hover {
+        background-color: #c82333;
+      }
+      
+      

@@ -1,0 +1,59 @@
+/* Form.module.css */
+.formContainer {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+}
+
+.formContainer label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.formContainer input[type="text"],
+.formContainer input[type="number"],
+.formContainer input[type="datetime-local"],
+.formContainer select,
+.formContainer textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.formContainer textarea {
+  resize: vertical; /* Allow vertical resizing only */
+}
+
+.formContainer fieldset {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.formContainer button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff; /* Primary color */
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.formContainer button:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+.formContainer .message {
+  margin-top: 20px;
+  color: green; /* Change color based on feedback */
+}

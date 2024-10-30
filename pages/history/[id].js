@@ -1,12 +1,163 @@
+// // pages/history/[id].js
+// import { useRouter } from 'next/router';
+// import { useEffect, useState } from 'react';
+
+// export default function InspectionDetail() {
+//   const router = useRouter();
+//   const { id } = router.query; // Get ID from the URL
+//   const [inspectionData, setInspectionData] = useState(null);
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     if (!id) return;
+
+//     const fetchInspectionData = async () => {
+//       setLoading(true);
+//       try {
+//         const response = await fetch(`/api/history/${id}`);
+//         const data = await response.json();
+//         setInspectionData(data);
+//       } catch (error) {
+//         console.error('Error fetching inspection data:', error);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchInspectionData();
+//   }, [id]);
+
+//   if (loading) return <p>Loading...</p>;
+//   if (!inspectionData) return <p>Error: Unable to load inspection details.</p>;
+
+//   // Assuming inspectionData has a results field with the required structure
+//   const results = inspectionData.results || {};
+
+//   return (
+//     <div>
+//       <h1>Inspection Details</h1>
+//       <p><strong>Name:</strong> {inspectionData.name}</p>
+//       <p><strong>Standard:</strong> {inspectionData.standard}</p>
+//       <p><strong>Note:</strong> {inspectionData.note}</p>
+//       {inspectionData.price && <p><strong>Price:</strong> {inspectionData.price}</p>}
+
+//       {/* Composition Table */}
+//       <h2>Composition</h2>
+//       <table>
+//         <thead>
+//           <tr>
+//             <th>Name</th>
+//             <th>Count</th>
+//             <th>Weight (kg)</th>
+//             <th>Percentage (%)</th>
+//           </tr>
+//         </thead>
+//         <tbody>
+//           {results.wholegrain && (
+//             <tr>
+//               <td>ข้าวเต็มเมล็ด</td>
+//               <td>{results.wholegrain.count}</td>
+//               <td>{results.wholegrain.weight}</td>
+//               <td>{results.wholegrain.percentage}</td>
+//             </tr>
+//           )}
+//           {results.broken_rice1 && (
+//             <tr>
+//               <td>ข้าวหักใหญ่</td>
+//               <td>{results.broken_rice1.count}</td>
+//               <td>{results.broken_rice1.weight}</td>
+//               <td>{results.broken_rice1.percentage}</td>
+//             </tr>
+//           )}
+//           {results.broken_rice2 && (
+//             <tr>
+//               <td>ข้าวหักทั่วไป</td>
+//               <td>{results.broken_rice2.count}</td>
+//               <td>{results.broken_rice2.weight}</td>
+//               <td>{results.broken_rice2.percentage}</td>
+//             </tr>
+//           )}
+//         </tbody>
+//       </table>
+
+//       {/* Defect Rice Table */}
+//       <h2>Defect Rice</h2>
+//       <table>
+//         <thead>
+//           <tr>
+//             <th>Name</th>
+//             <th>Count</th>
+//             <th>Weight (kg)</th>
+//             <th>Percentage (%)</th>
+//           </tr>
+//         </thead>
+//         <tbody>
+//           {/* Replace with your actual defect rice data structure */}
+//           {/* Assuming you have similar structures for defect rice */}
+//           <tr>
+//             <td>ข้าวเหลือง</td>
+//             <td>{results.defect_rice_yellow?.count || 0}</td>
+//             <td>{results.defect_rice_yellow?.weight || '0.00'}</td>
+//             <td>{results.defect_rice_yellow?.percentage || '0.00'}</td>
+//           </tr>
+//           <tr>
+//             <td>ข้าวท้องไข่</td>
+//             <td>{results.defect_rice_egg?.count || 0}</td>
+//             <td>{results.defect_rice_egg?.weight || '0.00'}</td>
+//             <td>{results.defect_rice_egg?.percentage || '0.00'}</td>
+//           </tr>
+//           <tr>
+//             <td>ข้าวเปลือก</td>
+//             <td>{results.defect_rice_husk?.count || 0}</td>
+//             <td>{results.defect_rice_husk?.weight || '0.00'}</td>
+//             <td>{results.defect_rice_husk?.percentage || '0.00'}</td>
+//           </tr>
+//           <tr>
+//             <td>ข้าวแดง</td>
+//             <td>{results.defect_rice_red?.count || 0}</td>
+//             <td>{results.defect_rice_red?.weight || '0.00'}</td>
+//             <td>{results.defect_rice_red?.percentage || '0.00'}</td>
+//           </tr>
+//           <tr>
+//             <td>ข้าวเสีย</td>
+//             <td>{results.defect_rice_damaged?.count || 0}</td>
+//             <td>{results.defect_rice_damaged?.weight || '0.00'}</td>
+//             <td>{results.defect_rice_damaged?.percentage || '0.00'}</td>
+//           </tr>
+//           <tr>
+//             <td>ข้าวเหนียว</td>
+//             <td>{results.defect_rice_sticky?.count || 0}</td>
+//             <td>{results.defect_rice_sticky?.weight || '0.00'}</td>
+//             <td>{results.defect_rice_sticky?.percentage || '0.00'}</td>
+//           </tr>
+//           <tr>
+//             <td>ข้าวปลอมปนทั้งหมด</td>
+//             <td>{results.defect_rice_mixed?.count || 0}</td>
+//             <td>{results.defect_rice_mixed?.weight || '0.00'}</td>
+//             <td>{results.defect_rice_mixed?.percentage || '0.00'}</td>
+//           </tr>
+//         </tbody>
+//       </table>
+      
+//       <button onClick={() => router.push(`/history/${id}/edit`)}>Edit</button>
+//       <button onClick={() => router.push('/')}>Back to Form</button>
+//     </div>
+//   );
+// }
+
+
 // pages/history/[id].js
+
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import styles from '/Users/rawinnipha/Test/next-app/styles/InspectionDetail.module.css';
 
 export default function InspectionDetail() {
   const router = useRouter();
   const { id } = router.query; // Get ID from the URL
   const [inspectionData, setInspectionData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [results, setResults] = useState(null);
 
   useEffect(() => {
     if (!id) return;
@@ -17,6 +168,9 @@ export default function InspectionDetail() {
         const response = await fetch(`/api/history/${id}`);
         const data = await response.json();
         setInspectionData(data);
+        
+        // Assuming `data` has a `results` field containing the inspection results
+        setResults(data.results); 
       } catch (error) {
         console.error('Error fetching inspection data:', error);
       } finally {
@@ -27,121 +181,80 @@ export default function InspectionDetail() {
     fetchInspectionData();
   }, [id]);
 
-  if (loading) return <p>Loading...</p>;
-  if (!inspectionData) return <p>Error: Unable to load inspection details.</p>;
-
-  // Assuming inspectionData has a results field with the required structure
-  const results = inspectionData.results || {};
+  if (loading) return <p className={styles.loading}>Loading...</p>;
+  if (!inspectionData || !results) return <p>Error: Unable to load inspection details.</p>;
 
   return (
-    <div>
-      <h1>Inspection Details</h1>
-      <p><strong>Name:</strong> {inspectionData.name}</p>
-      <p><strong>Standard:</strong> {inspectionData.standard}</p>
-      <p><strong>Note:</strong> {inspectionData.note}</p>
-      {inspectionData.price && <p><strong>Price:</strong> {inspectionData.price}</p>}
+    <div className={styles.inspectionContainer}>
+      <h2>Inspection Results</h2>
+      <div className={styles.inspectionDetail}>
+        <p><strong>Name:</strong> {inspectionData.name}</p>
+        <p><strong>Create Date - Time:</strong> {inspectionData.created_at}</p>
+        <p><strong>Inspection ID:</strong> {inspectionData.id}</p>
+        <p><strong>Standard:</strong> {inspectionData.standard}</p>
+        <p><strong>Total Sample:</strong> {results.totalSample || 0}</p>
+        <p><strong>Update Date - Time:</strong> {inspectionData.updated_at}</p>
+        <p><strong>Note:</strong> {inspectionData.note}</p>
+        {inspectionData.price && <p><strong>Price:</strong> {inspectionData.price}</p>}
+        {inspectionData.sampling_datetime && <p><strong>Date/Time of Sampling:</strong> {inspectionData.sampling_datetime}</p>}
+        {inspectionData.sampling_point && <p><strong>Sampling Point:</strong> {inspectionData.sampling_point}</p>}
+      </div>
+      <div className={styles.resultsSection}>
+        <h3>Composition</h3>
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Actual (%)</th>
+              <th>Weight (kg)</th>
+              <th>Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Object.entries(results.composition || {}).map(([key, data]) => (
+              <tr key={key}>
+                <td>{key}</td>
+                <td>{data.percentage || '0.00'}</td>
+                <td>{data.weight || '0.00'}</td>
+                <td>{data.count || 0}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-      {/* Composition Table */}
-      <h2>Composition</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Count</th>
-            <th>Weight (kg)</th>
-            <th>Percentage (%)</th>
-          </tr>
-        </thead>
-        <tbody>
-          {results.wholegrain && (
+      <div className={styles.resultsSection}>
+        <h3>Defect Rice</h3>
+        <table className={styles.table}>
+          <thead>
             <tr>
-              <td>ข้าวเต็มเมล็ด</td>
-              <td>{results.wholegrain.count}</td>
-              <td>{results.wholegrain.weight}</td>
-              <td>{results.wholegrain.percentage}</td>
+              <th>Name</th>
+              <th>Actual (%)</th>
+              <th>Weight (kg)</th>
+              <th>Count</th>
             </tr>
-          )}
-          {results.broken_rice1 && (
-            <tr>
-              <td>ข้าวหักใหญ่</td>
-              <td>{results.broken_rice1.count}</td>
-              <td>{results.broken_rice1.weight}</td>
-              <td>{results.broken_rice1.percentage}</td>
-            </tr>
-          )}
-          {results.broken_rice2 && (
-            <tr>
-              <td>ข้าวหักทั่วไป</td>
-              <td>{results.broken_rice2.count}</td>
-              <td>{results.broken_rice2.weight}</td>
-              <td>{results.broken_rice2.percentage}</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {Object.entries(results.defectRice || {}).map(([key, data]) => (
+              <tr key={key}>
+                <td>{key}</td>
+                <td>{data.percentage || '0.00'}</td>
+                <td>{data.weight || '0.00'}</td>
+                <td>{data.count || 0}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-      {/* Defect Rice Table */}
-      <h2>Defect Rice</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Count</th>
-            <th>Weight (kg)</th>
-            <th>Percentage (%)</th>
-          </tr>
-        </thead>
-        <tbody>
-          {/* Replace with your actual defect rice data structure */}
-          {/* Assuming you have similar structures for defect rice */}
-          <tr>
-            <td>ข้าวเหลือง</td>
-            <td>{results.defect_rice_yellow?.count || 0}</td>
-            <td>{results.defect_rice_yellow?.weight || '0.00'}</td>
-            <td>{results.defect_rice_yellow?.percentage || '0.00'}</td>
-          </tr>
-          <tr>
-            <td>ข้าวท้องไข่</td>
-            <td>{results.defect_rice_egg?.count || 0}</td>
-            <td>{results.defect_rice_egg?.weight || '0.00'}</td>
-            <td>{results.defect_rice_egg?.percentage || '0.00'}</td>
-          </tr>
-          <tr>
-            <td>ข้าวเปลือก</td>
-            <td>{results.defect_rice_husk?.count || 0}</td>
-            <td>{results.defect_rice_husk?.weight || '0.00'}</td>
-            <td>{results.defect_rice_husk?.percentage || '0.00'}</td>
-          </tr>
-          <tr>
-            <td>ข้าวแดง</td>
-            <td>{results.defect_rice_red?.count || 0}</td>
-            <td>{results.defect_rice_red?.weight || '0.00'}</td>
-            <td>{results.defect_rice_red?.percentage || '0.00'}</td>
-          </tr>
-          <tr>
-            <td>ข้าวเสีย</td>
-            <td>{results.defect_rice_damaged?.count || 0}</td>
-            <td>{results.defect_rice_damaged?.weight || '0.00'}</td>
-            <td>{results.defect_rice_damaged?.percentage || '0.00'}</td>
-          </tr>
-          <tr>
-            <td>ข้าวเหนียว</td>
-            <td>{results.defect_rice_sticky?.count || 0}</td>
-            <td>{results.defect_rice_sticky?.weight || '0.00'}</td>
-            <td>{results.defect_rice_sticky?.percentage || '0.00'}</td>
-          </tr>
-          <tr>
-            <td>ข้าวปลอมปนทั้งหมด</td>
-            <td>{results.defect_rice_mixed?.count || 0}</td>
-            <td>{results.defect_rice_mixed?.weight || '0.00'}</td>
-            <td>{results.defect_rice_mixed?.percentage || '0.00'}</td>
-          </tr>
-        </tbody>
-      </table>
-      
-      <button onClick={() => router.push(`/history/${id}/edit`)}>Edit</button>
-      <button onClick={() => router.push('/')}>Back to Form</button>
+      <div className={styles.buttonContainer}>
+        <button className={`${styles.button} ${styles.editButton}`} onClick={() => router.push(`/history/${id}/edit`)}>
+          Edit
+        </button>
+        <button className={`${styles.button} ${styles.backButton}`} onClick={() => router.push('/')}>
+          Back to Form
+        </button>
+      </div>
     </div>
   );
 }
-

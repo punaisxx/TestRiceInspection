@@ -1,6 +1,7 @@
 // pages/history/[id]/edit.js
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import styles from '/Users/rawinnipha/Test/next-app/styles/EditInspection.module.css';
 
 export default function EditInspection() {
   const router = useRouter();
@@ -73,13 +74,14 @@ export default function EditInspection() {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div>
+    <div className={styles.container}>
       <h1>Edit Inspection</h1>
       <form onSubmit={handleSubmit}>
         <div>
           <label>Note:</label>
           <textarea
             name="note"
+            className={styles.formInput}
             value={formData.note}
             onChange={handleChange}
             required
@@ -90,6 +92,7 @@ export default function EditInspection() {
           <input
             type="number"
             name="price"
+            className={styles.formInput}
             value={formData.price}
             onChange={handleChange}
           />
@@ -99,6 +102,7 @@ export default function EditInspection() {
           <input
             type="datetime-local"
             name="samplingDateTime"
+            className={styles.formInput}
             value={formData.samplingDateTime}
             onChange={handleChange}
           />
@@ -108,12 +112,13 @@ export default function EditInspection() {
           <input
             type="text"
             name="samplingPoint"
+            className={styles.formInput}
             value={formData.samplingPoint}
             onChange={handleChange}
           />
         </div>
-        <button type="button" onClick={handleCancel}>Cancel</button>
-        <button type="submit" onClick={handleSubmit}>Submit</button>
+        <button type="button" onClick={handleCancel} className={styles.cancelButton}>Cancel</button>
+        <button type="submit" className={styles.submitButton}>Submit</button>
       </form>
     </div>
   );

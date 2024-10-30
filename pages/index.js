@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import styles from '/Users/rawinnipha/Test/next-app/styles/Form.module.css';
 
 export default function Home() {
   // Form state
@@ -13,7 +14,7 @@ export default function Home() {
     samplingDateTime: '',
     upload: null,
   });
-
+  const [file, setFile] = useState(null);
   const [message, setMessage] = useState('');
   const [standards, setStandards] = useState([]);
 
@@ -57,6 +58,10 @@ useEffect(() => {
     } else {
       setFormData({ ...formData, [name]: value });
     }
+  };
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
   };
 
   // Handle form submission
@@ -103,9 +108,42 @@ useEffect(() => {
       setMessage('An error occurred while submitting the form.');
     } 
   };
+  // const formSubmission = new FormData(); // Use FormData to include file
+  //   formSubmission.append('name', formData.name);
+  //   formSubmission.append('standard', formData.standard);
+  //   formSubmission.append('note', formData.note);
+  //   formSubmission.append('price', formData.price);
+  //   formSubmission.append('samplingDateTime', formData.samplingDateTime);
+  //   formSubmission.append('samplingPoint', formData.samplingPoint);
+    
+  //   // Append file if it exists
+  //   if (file) {
+  //     formSubmission.append('upload', file);
+  //   }
+
+  //   // Post the data to /history API endpoint
+  //   try {
+  //     const response = await fetch('/api/history', {
+  //       method: 'POST',
+  //       body: formSubmission, // Send FormData
+  //     });
+
+  //     const result = await response.json();
+  //     if (response.ok && result.data.id) {
+  //       // Redirect to the newly created entry page
+  //       router.push(`/history/${String(result.data.id)}`);
+  //       setMessage('Form submitted successfully.');
+  //     } else {
+  //       setMessage(`Error: ${result.error}`);
+  //     }
+  //   } catch (error) {
+  //     console.error('An error occurred:', error);
+  //     setMessage('An error occurred while submitting the form.');
+  //   }
+  // };
 
   return (
-    <div>
+    <div className={styles.formContainer}>
       <h1>Data Submission Form</h1>
       <form onSubmit={handleSubmit}>
         {/* Name field */}
@@ -119,7 +157,6 @@ useEffect(() => {
             required
           />
         </label>
-        <br />
 
         {/* Standard field (dropdown) */}
         <label>
@@ -138,7 +175,6 @@ useEffect(() => {
             ))}
           </select>
         </label>
-        <br />
 
         {/* Note field */}
         <label>
@@ -149,7 +185,6 @@ useEffect(() => {
             onChange={handleChange}
           />
         </label>
-        <br />
 
         {/* Price field */}
         <label>
@@ -164,43 +199,23 @@ useEffect(() => {
             step="0.01"
           />
         </label>
-        <br />
 
         {/* Sampling Point (multiple checkboxes) */}
         <fieldset>
           <legend>Sampling Point (optional):</legend>
-          <label>
-            <input
-              type="checkbox"
-              name="samplingPoint"
-              value="Front End"
-              checked={formData.samplingPoint.includes('Front End')}
-              onChange={handleChange}
-            />
-            Front End
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="samplingPoint"
-              value="Back End"
-              checked={formData.samplingPoint.includes('Back End')}
-              onChange={handleChange}
-            />
-            Back End
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="samplingPoint"
-              value="Other"
-              checked={formData.samplingPoint.includes('Other')}
-              onChange={handleChange}
-            />
-            Other
-          </label>
+          {['Front End', 'Back End', 'Other'].map((point) => (
+            <label key={point}>
+              <input
+                type="checkbox"
+                name="samplingPoint"
+                value={point}
+                checked={formData.samplingPoint.includes(point)}
+                onChange={handleChange}
+              />
+              {point}
+            </label>
+          ))}
         </fieldset>
-        <br />
 
         {/* Date/Time of Sampling field */}
         <label>
@@ -212,7 +227,6 @@ useEffect(() => {
             onChange={handleChange}
           />
         </label>
-        <br />
 
         {/* File upload */}
         <label>
@@ -224,14 +238,13 @@ useEffect(() => {
             onChange={handleChange}
           />
         </label>
-        <br />
 
         {/* Submit button */}
         <button type="submit">Submit</button>
       </form>
 
       {/* Feedback message */}
-      {message && <p>{message}</p>}
+      {message && <p className={styles.message}>{message}</p>}
     </div>
   );
 }
