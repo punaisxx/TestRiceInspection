@@ -1,161 +1,161 @@
 /* InspectionDetail.module.css */
 .inspectionContainer {
-        max-width: 800px;
-        margin: 20px auto;
-        padding: 20px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        background-color: #fafafa;
-        font-family: Arial, sans-serif;
-      }
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: #fafafa;
+  font-family: Arial, sans-serif;
+}
       
-      .inspectionContainer h2 {
-        font-size: 24px;
-        color: #333;
-        margin-bottom: 20px;
-        border-bottom: 2px solid #007bff;
-        padding-bottom: 8px;
-      }
+.inspectionContainer h2 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 8px;
+}
       
-      .inspectionDetail {
-        margin-bottom: 12px;
-        font-size: 16px;
-      }
+.inspectionDetail {
+  margin-bottom: 12px;
+  font-size: 16px;
+}
       
-      .inspectionDetail strong {
-        font-weight: bold;
-        color: #555;
-      }
+.inspectionDetail strong {
+  font-weight: bold;
+  color: #555;
+}
       
-      .inspectionDetail p {
-        margin: 6px 0;
-      }
+.inspectionDetail p {
+  margin: 6px 0;
+}
       
-      .inspectionDetail .highlight {
-        font-weight: bold;
-        color: #007bff;
-      }
+.inspectionDetail .highlight {
+  font-weight: bold;
+  color: #007bff;
+}
       
-      .inspectionDetail .label {
-        color: #888;
-      }
+.inspectionDetail .label {
+  color: #888;
+}
       
-      .inspectionDetail .value {
-        color: #333;
-        font-weight: 500;
-      }
+.inspectionDetail .value {
+  color: #333;
+  font-weight: 500;
+}
       
-      .inspectionContainer p {
-        line-height: 1.6;
-        color: #444;
-      }
+.inspectionContainer p {
+  line-height: 1.6;
+  color: #444;
+}
       
-      .inspectionContainer .optionalDetails {
-        margin-top: 20px;
-        font-style: italic;
-        color: #666;
-      }
+.inspectionContainer .optionalDetails {
+  margin-top: 20px;
+  font-style: italic;
+  color: #666;
+}
 
 .container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #f9f9f9;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        font-family: Arial, sans-serif;
-      }
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
       
-      .h2 {
-        text-align: center;
-        margin-bottom: 24px;
-        color: #333;
-      }
+.h2 {
+  text-align: center;
+  margin-bottom: 24px;
+  color: #333;
+}
       
-      .resultsSection {
-        margin-bottom: 32px;
-      }
+.resultsSection {
+  margin-bottom: 32px;
+}
       
-      .h3 {
-        color: #444;
-        border-bottom: 2px solid #ddd;
-        padding-bottom: 8px;
-        margin-bottom: 16px;
-      }
+.h3 {
+  color: #444;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+}
       
-      .table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 16px;
-      }
+.table {
+  width: 100%;
+  border-collapse: collapse;
+   margin-bottom: 16px;
+}
       
-      .table th,
-      .table td {
-        padding: 12px 8px;
-        text-align: left;
-      }
+.table th,
+.table td {
+  padding: 12px 8px;
+  text-align: left;
+}
       
-      .table th {
-        background-color: #007BFF;
-        color: #fff;
-        text-transform: uppercase;
-        font-size: 14px;
-      }
+.table th {
+  background-color: #007BFF;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 14px;
+}
       
-      .table td {
-        background-color: #f4f7fa;
-        color: #333;
-        font-size: 13px;
-      }
+.table td {
+  background-color: #f4f7fa;
+  color: #333;
+  font-size: 13px;
+}
       
-      .table tr:nth-child(even) td {
-        background-color: #e9eef5;
-      }
+.table tr:nth-child(even) td {
+  background-color: #e9eef5;
+}
       
-      .loading,
-      .error {
-        text-align: center;
-        font-size: 16px;
-        color: #555;
-      }
+.loading,
+.error {
+  text-align: center;
+  font-size: 16px;
+  color: #555;
+}
 
       /* Button.module.css */
-      .button {
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-        font-weight: bold;
-        transition: background-color 0.3s ease, transform 0.2s ease;
-        color: white;
-      }
+.button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  color: white;
+}
       
-      .editButton {
-        background-color: #007bff; /* Bootstrap Primary Blue */
-      }
+.editButton {
+  background-color: #007bff; /* Bootstrap Primary Blue */
+}
       
-      .editButton:hover {
-        background-color: #0056b3; /* Darker Blue on Hover */
-        transform: translateY(-1px); /* Slight lift effect */
-      }
+.editButton:hover {
+  background-color: #0056b3; /* Darker Blue on Hover */
+  transform: translateY(-1px); /* Slight lift effect */
+}
       
-      .backButton {
-        background-color: #6c757d; /* Bootstrap Secondary Gray */
-      }
+.backButton {
+  background-color: #6c757d; /* Bootstrap Secondary Gray */
+}
       
-      .backButton:hover {
-        background-color: #5a6268; /* Darker Gray on Hover */
-        transform: translateY(-1px); /* Slight lift effect */
-      }
+.backButton:hover {
+  background-color: #5a6268; /* Darker Gray on Hover */
+  transform: translateY(-1px); /* Slight lift effect */
+}
 
-      .buttonContainer {
-        display: flex;
-        gap: 10px; /* Space between buttons */
-        justify-content: center; /* Center buttons horizontally */
-        margin-top: 20px; /* Space above buttons */
-      }
+.buttonContainer {
+  display: flex;
+  gap: 10px; /* Space between buttons */
+  justify-content: center; /* Center buttons horizontally */
+  margin-top: 20px; /* Space above buttons */
+}
       
       
       

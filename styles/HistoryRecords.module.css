@@ -1,94 +1,94 @@
 /* HistoryRecords.module.css */
 .container {
-        max-width: 800px;
-        margin: 20px auto;
-        padding: 20px;
-        font-family: Arial, sans-serif;
-      }
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
       
-      .h1 {
-        text-align: center;
-        color: #333;
-        margin-bottom: 20px;
-      }
+.h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
       
-      .error {
-        color: red;
-        text-align: center;
-        margin: 10px 0;
-      }
+.error {
+  color: red;
+  text-align: center;
+  margin: 10px 0;
+}
       
-      .searchContainer {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        margin-bottom: 20px;
-      }
+.searchContainer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
       
-      .searchInput {
-        padding: 8px;
-        font-size: 16px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        width: 200px;
-      }
+.searchInput {
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 200px;
+}
       
-      .searchButton {
-        padding: 8px 16px;
-        font-size: 16px;
-        color: #fff;
-        background-color: #007bff;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-      }
+.searchButton {
+  padding: 8px 16px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
       
-      .searchButton:hover {
-        background-color: #0056b3;
-      }
+.searchButton:hover {
+  background-color: #0056b3;
+}
       
-      .resultCard, .historyItem {
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        padding: 15px;
-        margin: 10px 0;
-        background-color: #fafafa;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      }
+.resultCard, .historyItem {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 15px;
+  margin: 10px 0;
+  background-color: #fafafa;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
       
-      .resultCard h2 {
-        font-size: 22px;
-        color: #333;
-        margin-bottom: 12px;
-      }
+.resultCard h2 {
+  font-size: 22px;
+  color: #333;
+  margin-bottom: 12px;
+}
       
-      .recordDetail, .historyItem p {
-        font-size: 16px;
-        color: #555;
-        margin: 6px 0;
-      }
+.recordDetail, .historyItem p {
+  font-size: 16px;
+  color: #555;
+  margin: 6px 0;
+}
       
-      .actions {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 10px;
-      }
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
       
-      .viewLink, .deleteButton {
-        font-size: 16px;
-        color: #007bff;
-        cursor: pointer;
-        text-decoration: underline;
-        background: none;
-        border: none;
-      }
+.viewLink, .deleteButton {
+  font-size: 16px;
+  color: #007bff;
+  cursor: pointer;
+  text-decoration: underline;
+  background: none;
+  border: none;
+}
       
-      .deleteButton {
-        color: red;
-      }
+.deleteButton {
+  color: red;
+}
       
-      .deleteButton:hover {
-        color: darkred;
-      }
+.deleteButton:hover {
+  color: darkred;
+}
       

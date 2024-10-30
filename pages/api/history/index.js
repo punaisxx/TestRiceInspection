@@ -2,57 +2,6 @@ import fs from 'fs';
 import path from 'path';
 import query from '/Users/rawinnipha/Test/next-app/lib/db.js';
 
-// Helper function to calculate inspection results based on standards
-// function calculateInspection(standard, grains) {
-//   if (!Array.isArray(grains)) {
-//     throw new TypeError("grains must be an array.");
-//   }
-
-//   const categories = {};
-//   grains.forEach((grain) => {
-//     let matched = false;
-
-//     for (const subStandard of standard.standardData) {
-//       const lengthValid = (
-//         (subStandard.conditionMin === 'GT' ? grain.length > subStandard.minLength : grain.length >= subStandard.minLength) &&
-//         (subStandard.conditionMax === 'LT' ? grain.length < subStandard.maxLength : grain.length <= subStandard.maxLength)
-//       );
-//       const shapeValid = subStandard.shape.includes(grain.shape);
-
-//       if (lengthValid && shapeValid) {
-//         if (!categories[subStandard.key]) {
-//           categories[subStandard.key] = { totalWeight: 0, count: 0 };
-//         }
-//         categories[subStandard.key].totalWeight += grain.weight;
-//         categories[subStandard.key].count += 1;
-//         matched = true;
-//         break;
-//       }
-//     }
-
-//     if (!matched) {
-//       if (!categories.unknown) {
-//         categories.unknown = { totalWeight: 0, count: 0 };
-//       }
-//       categories.unknown.totalWeight += grain.weight;
-//       categories.unknown.count += 1;
-//     }
-//   });
-
-//   const totalWeight = grains.reduce((sum, grain) => sum + grain.weight, 0);
-//   const results = {};
-//   for (const [category, data] of Object.entries(categories)) {
-//     results[category] = {
-//       percentage: ((data.totalWeight / totalWeight) * 100).toFixed(2),
-//       weight: data.totalWeight.toFixed(2),
-//       count: data.count,
-//     };
-//   }
-//   results.totalSample = grains.length;
-
-//   return results;
-// }
-
 function calculateInspection(standard, grains) {
   if (!Array.isArray(grains)) {
       throw new TypeError("grains must be an array.");
@@ -70,11 +19,9 @@ function calculateInspection(standard, grains) {
       "totalDefects": { totalWeight: 0, count: 0 }
   };
 
-  // Iterate through each grain
   grains.forEach((grain) => {
       let matched = false;
 
-      // Check for composition against standards
       for (const subStandard of standard.standardData) {
           const lengthValid = (
               (subStandard.conditionMin === 'GT' ? grain.length > subStandard.minLength : grain.length >= subStandard.minLength) &&
@@ -82,7 +29,6 @@ function calculateInspection(standard, grains) {
           );
           const shapeValid = subStandard.shape.includes(grain.shape);
 
-          // If valid for a standard, accumulate the weight and count
           if (lengthValid && shapeValid) {
               if (!categories[subStandard.key]) {
                   categories[subStandard.key] = { totalWeight: 0, count: 0 };
@@ -90,11 +36,10 @@ function calculateInspection(standard, grains) {
               categories[subStandard.key].totalWeight += grain.weight;
               categories[subStandard.key].count += 1;
               matched = true;
-              break; // Exit loop since it matches a standard
+              break;
           }
       }
 
-      // If no match found for standard, categorize as unknown
       if (!matched) {
           if (!categories.unknown) {
               categories.unknown = { totalWeight: 0, count: 0 };
@@ -124,7 +69,6 @@ function calculateInspection(standard, grains) {
       };
   }
 
-  // Prepare defect results
   results.defectRice = {};
   for (const [type, data] of Object.entries(defectCategories)) {
       if (data.count > 0) { // Only include types with actual counts
@@ -136,14 +80,12 @@ function calculateInspection(standard, grains) {
       }
   }
 
-  // Calculate total defects
   results.defectRice.totalDefects = {
       percentage: Object.values(defectCategories).reduce((sum, cat) => sum + (cat.totalWeight / totalWeight) * 100, 0).toFixed(2),
       weight: Object.values(defectCategories).reduce((sum, cat) => sum + cat.totalWeight, 0).toFixed(2),
       count: Object.values(defectCategories).reduce((sum, cat) => sum + cat.count, 0),
   };
 
-  // Include total sample count
   results.totalSample = grains.length;
 
   return results;

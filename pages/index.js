@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import styles from '/Users/rawinnipha/Test/next-app/styles/Form.module.css';
 
 export default function Home() {
-  // Form state
   const router = useRouter();
   const [formData, setFormData] = useState({
     name: '',
@@ -14,7 +13,6 @@ export default function Home() {
     samplingDateTime: '',
     upload: null,
   });
-  const [file, setFile] = useState(null);
   const [message, setMessage] = useState('');
   const [standards, setStandards] = useState([]);
 
@@ -23,7 +21,6 @@ useEffect(() => {
       try {
         const response = await fetch('/standards.json');
         
-        // Check if fetch response was okay
         if (!response.ok) {
           throw new Error(`Failed to fetch standards: ${response.statusText}`);
         }
@@ -38,14 +35,10 @@ useEffect(() => {
     fetchStandards();
 }, []);
 
-
-
-  // Handle form changes
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
 
     if (type === 'checkbox') {
-      // Handle checkbox multiple selections (sampling points)
       setFormData((prevState) => ({
         ...prevState,
         samplingPoint: checked
@@ -53,28 +46,20 @@ useEffect(() => {
           : prevState.samplingPoint.filter((item) => item !== value),
       }));
     } else if (type === 'file') {
-      // Handle file upload
       setFormData({ ...formData, upload: files[0] });
     } else {
       setFormData({ ...formData, [name]: value });
     }
   };
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-  };
-
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate required fields
     if (!formData.name || !formData.standard) {
       setMessage('Please fill out all required fields.');
       return;
     }
 
-    // Validate price range
     if (formData.price && (formData.price < 0 || formData.price > 100000)) {
       setMessage('Price must be between 0 and 100,000.');
       return;
@@ -85,8 +70,20 @@ useEffect(() => {
       upload: formData.upload ? formData.upload.name : null, // sending only file name
     };
 
-    // Post the data to /history API endpoint
+    const data = new FormData();
+    data.append("name", formData.name);
+    data.append("standard", formData.standard);
+    data.append("note", formData.note);
+    data.append("price", formData.price);
+    data.append("samplingPoint", JSON.stringify(formData.samplingPoint));
+    data.append("samplingDateTime", formData.samplingDateTime);
+  
+    if (formData.upload) {
+      data.append("upload", formData.upload);
+    }
+
     try {
+      
       const response = await fetch('/api/history', {
         method: 'POST',
         headers: {
@@ -97,7 +94,6 @@ useEffect(() => {
 
       const result = await response.json();
       if (response.ok && result.data.id) {
-        // Redirect to the newly created entry page
         router.push(`/history/${String(result.data.id)}`);
         setMessage('Form submitted successfully.');
       } else {
@@ -108,45 +104,11 @@ useEffect(() => {
       setMessage('An error occurred while submitting the form.');
     } 
   };
-  // const formSubmission = new FormData(); // Use FormData to include file
-  //   formSubmission.append('name', formData.name);
-  //   formSubmission.append('standard', formData.standard);
-  //   formSubmission.append('note', formData.note);
-  //   formSubmission.append('price', formData.price);
-  //   formSubmission.append('samplingDateTime', formData.samplingDateTime);
-  //   formSubmission.append('samplingPoint', formData.samplingPoint);
-    
-  //   // Append file if it exists
-  //   if (file) {
-  //     formSubmission.append('upload', file);
-  //   }
-
-  //   // Post the data to /history API endpoint
-  //   try {
-  //     const response = await fetch('/api/history', {
-  //       method: 'POST',
-  //       body: formSubmission, // Send FormData
-  //     });
-
-  //     const result = await response.json();
-  //     if (response.ok && result.data.id) {
-  //       // Redirect to the newly created entry page
-  //       router.push(`/history/${String(result.data.id)}`);
-  //       setMessage('Form submitted successfully.');
-  //     } else {
-  //       setMessage(`Error: ${result.error}`);
-  //     }
-  //   } catch (error) {
-  //     console.error('An error occurred:', error);
-  //     setMessage('An error occurred while submitting the form.');
-  //   }
-  // };
 
   return (
     <div className={styles.formContainer}>
       <h1>Data Submission Form</h1>
       <form onSubmit={handleSubmit}>
-        {/* Name field */}
         <label>
           Name (required):
           <input
@@ -158,7 +120,6 @@ useEffect(() => {
           />
         </label>
 
-        {/* Standard field (dropdown) */}
         <label>
           Standard (required):
           <select
@@ -186,7 +147,6 @@ useEffect(() => {
           />
         </label>
 
-        {/* Price field */}
         <label>
           Price (optional, 0-100,000):
           <input
@@ -200,7 +160,6 @@ useEffect(() => {
           />
         </label>
 
-        {/* Sampling Point (multiple checkboxes) */}
         <fieldset>
           <legend>Sampling Point (optional):</legend>
           {['Front End', 'Back End', 'Other'].map((point) => (
@@ -217,7 +176,6 @@ useEffect(() => {
           ))}
         </fieldset>
 
-        {/* Date/Time of Sampling field */}
         <label>
           Date/Time of Sampling (optional):
           <input
@@ -228,7 +186,6 @@ useEffect(() => {
           />
         </label>
 
-        {/* File upload */}
         <label>
           Upload (.json file) (optional):
           <input
@@ -239,11 +196,9 @@ useEffect(() => {
           />
         </label>
 
-        {/* Submit button */}
         <button type="submit">Submit</button>
       </form>
 
-      {/* Feedback message */}
       {message && <p className={styles.message}>{message}</p>}
     </div>
   );

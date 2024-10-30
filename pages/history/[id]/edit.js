@@ -5,7 +5,7 @@ import styles from '/Users/rawinnipha/Test/next-app/styles/EditInspection.module
 
 export default function EditInspection() {
   const router = useRouter();
-  const { id } = router.query;  // Get ID from the URL
+  const { id } = router.query;  
   const [formData, setFormData] = useState({
     note: '',
     price: '',
@@ -58,7 +58,7 @@ export default function EditInspection() {
         body: JSON.stringify(formData)
       });
       if (response.ok) {
-        router.push(`/history/${id}`);  // Redirect to the result page
+        router.push(`/history/${id}`);  
       } else {
         console.error('Failed to update inspection');
       }

@@ -31,7 +31,6 @@ export default async function handler(req, res) {
       res.status(500).json({ error: 'Failed to delete record' });
     }
   } else if (req.method === 'PATCH') {
-    // Retrieve the fields from the request body, defaulting to null if empty
     const {
       note,
       price,
@@ -39,11 +38,10 @@ export default async function handler(req, res) {
       samplingPoint
     } = req.body;
 
-    // Prepare values with null handling for empty fields
     const values = [
       note,
       price || null,
-      samplingDateTime || null, // Use null instead of empty string for timestamps
+      samplingDateTime || null, 
       samplingPoint || null,
       id
     ];
