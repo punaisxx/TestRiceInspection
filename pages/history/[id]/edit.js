@@ -1,7 +1,7 @@
 // pages/history/[id]/edit.js
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import styles from '/Users/rawinnipha/Test/next-app/styles/EditInspection.module.css';
+import styles from '/Path/Test/next-app/styles/EditInspection.module.css';
 
 export default function EditInspection() {
   const router = useRouter();

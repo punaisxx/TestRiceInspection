@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import styles from '/Users/rawinnipha/Test/next-app/styles/InspectionDetail.module.css';
+import styles from '/Path/Test/next-app/styles/InspectionDetail.module.css';
 
 export default function InspectionDetail() {
   const router = useRouter();

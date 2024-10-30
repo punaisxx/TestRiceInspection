@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
-import styles from '/Users/rawinnipha/Test/next-app/styles/HistoryRecords.module.css';
+import styles from '/Path/Test/next-app/styles/HistoryRecords.module.css';
 
 export default function HistoryPage() {
   const [histories, setHistories] = useState([]);

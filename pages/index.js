@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import styles from '/Users/rawinnipha/Test/next-app/styles/Form.module.css';
+import styles from '/Path/Test/next-app/styles/Form.module.css';
 
 export default function Home() {
   const router = useRouter();

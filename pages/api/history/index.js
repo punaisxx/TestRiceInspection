@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import query from '/Users/rawinnipha/Test/next-app/lib/db.js';
+import query from '/Path/Test/next-app/lib/db.js';
 
 function calculateInspection(standard, grains) {
   if (!Array.isArray(grains)) {
